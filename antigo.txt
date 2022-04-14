@@ -1,0 +1,174 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Cliente;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.Status;
+import util.Mensagem;
+
+/**
+ *
+ * @author rubia
+ */
+public class Cliente {
+    public static void main(String[] args) throws ClassNotFoundException{
+        
+        try {
+            System.out.println("Estabelecendo conexao..");
+            Socket socket =  new Socket("localhost",5555);
+            System.out.println("Conexao estabelecida..");
+            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+  
+            System.out.println("Enviando mensagem..");
+                       
+
+            Mensagem m = new Mensagem("LOGIN");
+            m.setParam("user","Aluno");
+            m.setParam("pass","senha");
+            
+            output.writeObject(m);
+            output.flush();
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            //System.out.println("Resposta: \n"+ m);
+            
+            if(m.getStatus() == Status.OK){
+                System.out.println("Mensagem: " + m);
+            } else{
+                System.out.println("Erro: " + m.getStatus());
+            }
+            
+            ///////////////////////enviar
+           
+            m = new Mensagem("ENVIAR");
+            m.setParam("titulo","Silvio santos");
+            m.setParam("descricao","Resumo da minha vida");
+            m.setParam("tamanho",10);
+            m.setParam("prioridade","alta");
+            
+            
+            output.writeObject(m);
+            output.flush();
+
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.println("Resposta: \n"+ m);
+            
+            
+            
+            m = new Mensagem("ENVIAR");
+            m.setParam("titulo","alii babba");
+            m.setParam("descricao","Resumo ");
+            m.setParam("tamanho",10);
+            m.setParam("prioridade","media");
+            
+            
+            output.writeObject(m);
+            output.flush();
+
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.println("Resposta: \n"+ m);
+            
+            
+            
+            
+            m = new Mensagem("LISTAR");
+
+
+            output.writeObject(m);
+            output.flush();
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.println("Resposta: \n"+ m);
+            
+            
+            
+            m = new Mensagem("BUSCA");
+            m.setParam("titulo","alii babba");
+            
+            output.writeObject(m);
+            output.flush();
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.
+                    println("Resposta: \n"+ m);
+            
+            
+            m = new Mensagem("CONFIRMAR");
+            m.setParam("titulo","alii babba");
+            
+            output.writeObject(m);
+            output.flush();
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.
+            println("Resposta: \n"+ m);
+            
+            m = new Mensagem("LISTAR");
+
+
+            output.writeObject(m);
+            output.flush();
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.println("Resposta: \n"+ m);
+            
+            
+            
+            m = new Mensagem("COMPRA");
+            m.setParam("titulo","alii babba");
+            m.setParam("valorPago", 60.0);
+            
+            output.writeObject(m);
+            output.flush();
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.
+            println("Resposta: \n"+ m);
+            
+            
+            
+            
+            m = new Mensagem("SAIR");
+            output.writeObject(m);
+            output.flush();
+            
+            System.out.println("\n");
+            System.out.println(m);
+            
+            m = (Mensagem) input.readObject();
+            System.out.println("\n");
+            System.out.println("Resposta: \n"+ m);
+            
+            
+            input.close();
+            output.close();
+            socket.close();
+            
+        } catch (IOException ex) {
+             System.out.println("Erro no cliente.");
+             System.out.println("Erro: " + ex.getMessage());
+        } catch(ClassNotFoundException ex){
+            System.out.println("Erro no cast: " + ex.getMessage());
+        
+        }
+    }
+}
